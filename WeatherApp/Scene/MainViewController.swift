@@ -150,6 +150,13 @@ extension MainViewController: PresenterView {
             cachedLabel.isHidden = true
         }
         
+        firstWidgetsStack.arrangedSubviews.forEach {
+            $0.removeFromSuperview()
+        }
+        secondWidgetsStack.arrangedSubviews.forEach {
+            $0.removeFromSuperview()
+        }
+        
         if let humidity = first?.hours.first?.humidity {
             let humidityWidget = WidgetView()
             humidityWidget.setup(with: .humidity, info: String(humidity))
