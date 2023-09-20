@@ -39,6 +39,18 @@ final class MainViewController: UIViewController {
     private let currentWeatherView = CurrentWeatherView()
     private let hourlyForecastView = HourlyForecastView()
     private let dailyForecastView = DailyForecastView()
+    
+    private let firstWidgetsStack = UIStackView().with {
+        $0.axis = .horizontal
+        $0.spacing = 4
+        $0.distribution = .fillEqually
+    }
+    
+    private let secondWidgetsStack = UIStackView().with {
+        $0.axis = .horizontal
+        $0.spacing = 4
+        $0.distribution = .fillEqually
+    }
 
     private let scrollView = UIScrollView()
     
@@ -68,7 +80,7 @@ final class MainViewController: UIViewController {
             $0.width.equalTo(scrollView)
         }
         
-        contentView.addSubviews(cachedLabel, currentWeatherView, hourlyForecastView, dailyForecastView)
+        contentView.addSubviews(cachedLabel, currentWeatherView, hourlyForecastView, dailyForecastView, firstWidgetsStack, secondWidgetsStack)
         
         cachedLabel.snp.makeConstraints {
             $0.top.equalToSuperview().offset(20)
@@ -87,6 +99,16 @@ final class MainViewController: UIViewController {
         dailyForecastView.snp.makeConstraints {
             $0.top.equalTo(hourlyForecastView.snp.bottom).offset(10)
             $0.leading.trailing.equalToSuperview().inset(20)
+        }
+        
+        firstWidgetsStack.snp.makeConstraints {
+            $0.top.equalTo(dailyForecastView.snp.bottom).offset(10)
+            $0.leading.trailing.equalToSuperview().inset(20)
+        }
+        
+        secondWidgetsStack.snp.makeConstraints {
+            $0.top.equalTo(firstWidgetsStack.snp.bottom).offset(10)
+            $0.leading.trailing.equalToSuperview().inset(20)
             $0.bottom.equalTo(contentView)
         }
     }
@@ -100,11 +122,13 @@ extension MainViewController: PresenterView {
     }
     
     func displayWeather(_ allData: ForecastDomainModel, fromCache: Bool) {
+        let first = allData.futureForecast.days.first
+        let isCelsius = UnitTemperature.current == .celsius
         let currentWeatherInfo = CurrentWeatherViewInfo(
             locationName: allData.locationName ?? "Unknown location",
-            temp: allData.currentForecast.tempC,
-            minTemp: allData.futureForecast.days.first?.minTempC,
-            maxTemp: allData.futureForecast.days.first?.maxTempC,
+            temp: isCelsius ? allData.currentForecast.tempC : allData.currentForecast.tempF,
+            minTemp: isCelsius ? first?.minTempC : first?.minTempF,
+            maxTemp: isCelsius ? first?.maxTempC : first?.maxTempF,
             condition: allData.futureForecast.days.first?.condition ?? "")
         currentWeatherView.setup(with: currentWeatherInfo)
         
@@ -125,6 +149,34 @@ extension MainViewController: PresenterView {
         } else {
             cachedLabel.isHidden = true
         }
+        
+        if let humidity = first?.hours.first?.humidity {
+            let humidityWidget = WidgetView()
+            humidityWidget.setup(with: .humidity, info: String(humidity))
+            firstWidgetsStack.addArrangedSubview(humidityWidget)
+        }
+        
+        if let feelC = first?.hours.first?.feelC,
+           let feelF = first?.hours.first?.feelF {
+            let feelWidget = WidgetView()
+            feelWidget.setup(with: .feel, info: String(isCelsius ? String(feelC) : String(feelF)))
+            firstWidgetsStack.addArrangedSubview(feelWidget)
+        }
+        
+        if let windKph = first?.hours.first?.windKPH,
+           let windMph = first?.hours.first?.windMPH {
+            let windWidget = WidgetView()
+            windWidget.setup(with: .windSpeed, info: String(isCelsius ? String(windKph) : String(windMph)))
+            secondWidgetsStack.addArrangedSubview(windWidget)
+        }
+        
+        if let visKM = first?.hours.first?.visKm,
+           let visML = first?.hours.first?.visMiles {
+            let visWidget = WidgetView()
+            visWidget.setup(with: .visibility, info: String(isCelsius ? String(visKM) : String(visML)))
+            secondWidgetsStack.addArrangedSubview(visWidget)
+        }
+        
     }
 }
 

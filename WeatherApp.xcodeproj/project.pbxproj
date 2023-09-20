@@ -58,6 +58,8 @@
 		A43A1AD02ABAFD7700804C10 /* DayCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A43A1ACF2ABAFD7700804C10 /* DayCell.swift */; };
 		A43A1AD22ABB0EDB00804C10 /* Date+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = A43A1AD12ABB0EDB00804C10 /* Date+Extension.swift */; };
 		A4C9A2C52ABB3B3900B65412 /* ReachabilityService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4C9A2C42ABB3B3900B65412 /* ReachabilityService.swift */; };
+		A4C9A2C72ABB959800B65412 /* UnitTemperature+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4C9A2C62ABB959800B65412 /* UnitTemperature+Extension.swift */; };
+		A4C9A2C92ABB97FE00B65412 /* WidgetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4C9A2C82ABB97FE00B65412 /* WidgetView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -112,6 +114,8 @@
 		A43A1ACF2ABAFD7700804C10 /* DayCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DayCell.swift; sourceTree = "<group>"; };
 		A43A1AD12ABB0EDB00804C10 /* Date+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date+Extension.swift"; sourceTree = "<group>"; };
 		A4C9A2C42ABB3B3900B65412 /* ReachabilityService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReachabilityService.swift; sourceTree = "<group>"; };
+		A4C9A2C62ABB959800B65412 /* UnitTemperature+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UnitTemperature+Extension.swift"; sourceTree = "<group>"; };
+		A4C9A2C82ABB97FE00B65412 /* WidgetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WidgetView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -206,6 +210,7 @@
 				A43A1A182AB9F59D00804C10 /* Double+Extension.swift */,
 				A43A1AB02ABAEA0C00804C10 /* UIEdgeInsets+Extension.swift */,
 				A43A1AD12ABB0EDB00804C10 /* Date+Extension.swift */,
+				A4C9A2C62ABB959800B65412 /* UnitTemperature+Extension.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -217,6 +222,7 @@
 				A422E8562AB8CFEA005547E5 /* CurrentWeatherView.swift */,
 				A43A1A1A2AB9F82C00804C10 /* HourlyForecastView.swift */,
 				A43A1A1C2AB9F93B00804C10 /* DailyForecastView.swift */,
+				A4C9A2C82ABB97FE00B65412 /* WidgetView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -358,7 +364,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A4C9A2C72ABB959800B65412 /* UnitTemperature+Extension.swift in Sources */,
 				A43A1AC62ABAF16100804C10 /* CurrentForecastEntity+CoreDataClass.swift in Sources */,
+				A4C9A2C92ABB97FE00B65412 /* WidgetView.swift in Sources */,
 				A422E84C2AB8CC69005547E5 /* Collection+Extension.swift in Sources */,
 				A422E8572AB8CFEA005547E5 /* CurrentWeatherView.swift in Sources */,
 				A43A1A332ABAB8FA00804C10 /* PersistanceService.swift in Sources */,

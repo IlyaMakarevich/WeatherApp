@@ -22,6 +22,10 @@ class MainPresenter {
     private weak var view: PresenterView?
     private var cancellables = Set<AnyCancellable>()
     
+    private var isCelsius: Bool {
+        return UnitTemperature.current == .celsius
+    }
+    
     private let distanceConstant = 8000.0 // дистанция в метрах. если кешированная инфа ближе то может использовать эту инфу
         
     init(with view: PresenterView,
@@ -70,7 +74,9 @@ class MainPresenter {
 
         let allHoursLimited = allHours.sorted(by: { $0.date < $1.date }).filter { $0.date > now }.prefix(24)
         let hours: [HourlyForecastViewInfo.HourItemInfo] = allHoursLimited.map {
-            return .init(time: $0.date, code: $0.conditionCode, temp: Int($0.tempC))
+            return .init(time: $0.date,
+                         code: $0.conditionCode,
+                         temp: Int(isCelsius ? $0.tempC : $0.tempF))
         }
         return .init(hours: hours)
     }
@@ -82,7 +88,10 @@ class MainPresenter {
             $0.date >= now
         }
         let days: [DailyForecastViewInfo.DayItemInfo] = allDaysLimited.map {
-            return .init(time: $0.date, code: $0.conditionCode, minTemp: Int($0.minTempC), maxTemp: Int($0.maxTempC))
+            return .init(time: $0.date,
+                         code: $0.conditionCode,
+                         minTemp: isCelsius ? Int($0.minTempC) : Int($0.minTempF),
+                         maxTemp: isCelsius ? Int($0.maxTempC) : Int($0.maxTempF))
         }
         return .init(days: days)
         
@@ -131,7 +140,19 @@ class MainPresenter {
             }
             
             let forecastDays: [DayForecastDomainModel] = allActualDays.map {
-                return .init(date: $0.date, maxTempC: $0.maxTempC, maxTempF: $0.maxTempF, minTempC: $0.maxTempC, minTempF: $0.maxTempF, avgTempC: $0.avgTempC, avgTempF: $0.avgTempF, windKPH: $0.windKPH, windMPH: $0.windMPH, visKm: $0.visKm, visMiles: $0.visMiles, condition: $0.condition, conditionCode: $0.conditionCode, hours: $0.hours)
+                return .init(date: $0.date,
+                             maxTempC: $0.maxTempC,
+                             maxTempF: $0.maxTempF,
+                             minTempC: $0.maxTempC,
+                             minTempF: $0.maxTempF,
+                             avgTempC: $0.avgTempC,
+                             avgTempF: $0.avgTempF,
+                             windKPH: $0.windKPH,
+                             windMPH: $0.windMPH,
+                             visKm: $0.visKm,
+                             visMiles: $0.visMiles,
+                             condition: $0.condition,
+                             conditionCode: $0.conditionCode, hours: $0.hours)
             }
             let current = CurrentWeatherDomainModel(tempF: firstActualDay.avgTempF,
                                                    tempC: firstActualDay.avgTempC,
