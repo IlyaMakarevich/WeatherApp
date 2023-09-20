@@ -57,8 +57,8 @@ final class DailyForecastView: BaseView {
 
             return Day(.init(time: time,
                              condition: item.code,
-                             minTemp: String(item.minTemp),
-                             maxTemp: String(item.maxTemp)))
+                             minTemp: String(item.minTemp) + "°",
+                             maxTemp: String(item.maxTemp) + "°"))
         }
         source.sections = [.init(header: nil, hourInfos)]
         

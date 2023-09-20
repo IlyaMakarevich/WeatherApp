@@ -9,7 +9,7 @@ import Foundation
 import UIKit
 
 enum WidgetType {
-    case humidity, feel, windSpeed, visibility
+    case humidity, feel(isMetric: Bool), windSpeed(isMetric: Bool), visibility(isMetric: Bool)
     
     var title: String {
         switch self {
@@ -23,6 +23,21 @@ enum WidgetType {
             return "Visibility"
         }
     }
+    
+    var addition: String {
+        switch self {
+        case .humidity:
+            return "%"
+        case .feel(let isMetric):
+            return isMetric ? "°C" : "°F"
+        case .windSpeed(let isMetric):
+            return isMetric ? "KmH" : "MpH"
+        case .visibility(let isMetric):
+            return isMetric ? "km" : "miles"
+        }
+    }
+    
+    
 }
 
 final class WidgetView: BaseView {
@@ -34,19 +49,28 @@ final class WidgetView: BaseView {
         $0.font = UIFont.systemFont(ofSize: 50, weight: .medium)
     }
     
+    private let additionInfoLabel = UILabel().with {
+        $0.font = UIFont.systemFont(ofSize: 20, weight: .medium)
+    }
+    
     override func setupView() {
         super.setupView()
         self.backgroundColor = .black.withAlphaComponent(0.1)
         self.layer.cornerRadius = 10
         self.clipsToBounds = false
         
-        addSubviews(titleLabel, infoLabel)
+        addSubviews(titleLabel, infoLabel, additionInfoLabel)
         titleLabel.snp.makeConstraints {
             $0.top.leading.equalToSuperview().offset(10)
         }
         
         infoLabel.snp.makeConstraints {
             $0.center.equalToSuperview()
+        }
+        
+        additionInfoLabel.snp.makeConstraints {
+            $0.top.equalTo(infoLabel.snp.bottom).offset(2)
+            $0.centerX.equalToSuperview()
         }
         
         snp.makeConstraints {
@@ -57,5 +81,6 @@ final class WidgetView: BaseView {
     func setup(with type: WidgetType, info: String) {
         titleLabel.text = type.title
         infoLabel.text = info
+        additionInfoLabel.text = type.addition
     }
 }

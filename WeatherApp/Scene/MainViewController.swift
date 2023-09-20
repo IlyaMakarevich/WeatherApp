@@ -159,21 +159,21 @@ extension MainViewController: PresenterView {
         if let feelC = first?.hours.first?.feelC,
            let feelF = first?.hours.first?.feelF {
             let feelWidget = WidgetView()
-            feelWidget.setup(with: .feel, info: String(isCelsius ? String(feelC) : String(feelF)))
+            feelWidget.setup(with: .feel(isMetric: isCelsius), info: String(isCelsius ? String(feelC) : String(feelF)))
             firstWidgetsStack.addArrangedSubview(feelWidget)
         }
         
         if let windKph = first?.hours.first?.windKPH,
            let windMph = first?.hours.first?.windMPH {
             let windWidget = WidgetView()
-            windWidget.setup(with: .windSpeed, info: String(isCelsius ? String(windKph) : String(windMph)))
+            windWidget.setup(with: .windSpeed(isMetric: isCelsius), info: String(isCelsius ? String(windKph) : String(windMph)))
             secondWidgetsStack.addArrangedSubview(windWidget)
         }
         
         if let visKM = first?.hours.first?.visKm,
            let visML = first?.hours.first?.visMiles {
             let visWidget = WidgetView()
-            visWidget.setup(with: .visibility, info: String(isCelsius ? String(visKM) : String(visML)))
+            visWidget.setup(with: .visibility(isMetric: isCelsius), info: String(isCelsius ? String(visKM) : String(visML)))
             secondWidgetsStack.addArrangedSubview(visWidget)
         }
         
