@@ -27,8 +27,9 @@ extension DayForecastEntity {
     @NSManaged public var visKm: Double
     @NSManaged public var visMiles: Double
     @NSManaged public var condition: String?
-    @NSManaged public var conditionCode: Int16
-    @NSManaged public var hourForecasts: NSSet?
+    @NSManaged public var conditionCode: Int32
+    @NSManaged public var date: Date?
+    @NSManaged public var hourForecasts: Set<HourForecastEntity>
     @NSManaged public var futureForecasts: FutureForecastEntity?
 
 }

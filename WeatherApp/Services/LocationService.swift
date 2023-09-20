@@ -45,6 +45,6 @@ final class LocationService: NSObject, LocationServiceProtocol, CLLocationManage
     }
     
     func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
-        print("error gettin location")
+        debugPrint("LocationService: didFailWithError")
     }
 }

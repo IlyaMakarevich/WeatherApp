@@ -13,4 +13,11 @@ extension Date {
          let seconds = -TimeInterval(timezone.secondsFromGMT(for: self))
          return Date(timeInterval: seconds, since: self)
      }
+    
+    var shortDay: String {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "EE"
+        let dayInWeek = dateFormatter.string(from: self)
+        return dayInWeek
+    }
 }

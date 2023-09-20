@@ -29,20 +29,20 @@ struct BackendError: Codable, Error {
 }
 
 protocol APIServiceProtocol {
-    func getForecast(for coordinates: Coordinates) -> AnyPublisher<DataResponse<ForecastModel, NetworkError>, Never>
+    func getForecast(for coordinates: Coordinates) -> AnyPublisher<DataResponse<ForecastServerModel, NetworkError>, Never>
 }
 
 final class APIService {}
 
 extension APIService: APIServiceProtocol {
-    func getForecast(for coordinates: Coordinates) -> AnyPublisher<DataResponse<ForecastModel, NetworkError>, Never> {
+    func getForecast(for coordinates: Coordinates) -> AnyPublisher<DataResponse<ForecastServerModel, NetworkError>, Never> {
         let parameters: [String: String] = ["key": Constants.weatherApiKey,
                                             "q": coordinates.value,
                                             "aqi": "no",
                                             "days": "10"]
         return AF.request(URL(string: Constants.forecastRoute)!, parameters: parameters)
             .validate()
-            .publishDecodable(type: ForecastModel.self)
+            .publishDecodable(type: ForecastServerModel.self)
             .map { response in
                 response.mapError { error in
                     let backendError = response.data.flatMap { try? JSONDecoder().decode(BackendError.self, from: $0)}

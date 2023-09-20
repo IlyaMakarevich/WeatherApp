@@ -8,8 +8,15 @@
 import Foundation
 import UIKit
 
+struct CurrentWeatherViewInfo {
+    let locationName: String
+    let temp: Double
+    let minTemp: Double?
+    let maxTemp: Double?
+    let condition: String
+}
+
 final class CurrentWeatherView: BaseView {
-    
     private let locationLabel = UILabel().with {
         $0.font = UIFont.systemFont(ofSize: 25, weight: .semibold)
         $0.adjustsFontSizeToFitWidth = true
@@ -19,29 +26,37 @@ final class CurrentWeatherView: BaseView {
         
     private let currentTempLabel = UILabel().with {
         $0.font = UIFont.systemFont(ofSize: 76)
+        $0.text = "-"
     }
     
     private let minTempLabel = UILabel().with {
         $0.font = UIFont.systemFont(ofSize: 20, weight: .semibold)
+        $0.text = "-"
     }
     private let maxTempLabel = UILabel().with {
         $0.font = UIFont.systemFont(ofSize: 20, weight: .semibold)
+        $0.text = "-"
     }
     private let descriptionLabel = UILabel().with {
         $0.font = UIFont.systemFont(ofSize: 20, weight: .semibold)
     }
     
-    func setup(with model: ForecastDomainModel) {
+    func setup(with model: CurrentWeatherViewInfo) {
         locationLabel.text = model.locationName
-        currentTempLabel.text = String(model.currentForecast.tempC.roundedWithoutZero()) + "°"
-        maxTempLabel.text = "to do "//"Max: " + (model.roundedWithoutZero() ?? "-")
-        minTempLabel.text = "to do" //+ (model.minTempC?.roundedWithoutZero() ?? "-")
-        descriptionLabel.text = model.currentForecast.descr
+        currentTempLabel.text = model.temp.roundedTempWithoutZero()
+        if let maxTemp = model.maxTemp {
+            maxTempLabel.text = "Max: " + maxTemp.roundedTempWithoutZero()
+        }
+        
+        if let minTemp = model.minTemp {
+            minTempLabel.text = "Min: " + minTemp.roundedTempWithoutZero()
+        }
+        
+        descriptionLabel.text = model.condition
     }
     
     override func setupView() {
         super.setupView()
-        clipsToBounds = false
         
         snp.makeConstraints {
             $0.height.equalTo(200)

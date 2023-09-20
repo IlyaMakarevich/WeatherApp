@@ -16,7 +16,7 @@ extension FutureForecastEntity {
         return NSFetchRequest<FutureForecastEntity>(entityName: "FutureForecastEntity")
     }
 
-    @NSManaged public var dayForecasts: NSSet?
+    @NSManaged public var dayForecasts: Set<DayForecastEntity>
     @NSManaged public var forecastEntity: ForecastEntity?
 
 }

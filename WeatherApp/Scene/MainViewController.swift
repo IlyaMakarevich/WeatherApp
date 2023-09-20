@@ -9,15 +9,31 @@ import UIKit
 import SnapKit
 import Combine
 
+enum ErrorType {
+    case server
+    case connection
+    
+    var title: String {
+        switch self {
+        case .server:
+            return "Error with server data"
+        case .connection:
+            return "No internet connection"
+        }
+    }
+}
+
 final class MainViewController: UIViewController {
     
     private lazy var presenter = MainPresenter(with: self,
                                                apiService: APIService(),
-                                               locationService: LocationService(), persistanceService: PersistanceService())
+                                               locationService: LocationService(),
+                                               persistanceService: PersistanceService())
+
     
-    private let reloadButton = UIButton().with {
-        $0.setTitle("Reload", for: .normal)
-        $0.setTitleColor(UIColor.black, for: .normal)
+    private let cachedLabel = UILabel().with {
+        $0.font = UIFont.systemFont(ofSize: 12, weight: .thin)
+        $0.isHidden = true
     }
     
     private let currentWeatherView = CurrentWeatherView()
@@ -27,14 +43,11 @@ final class MainViewController: UIViewController {
     private let scrollView = UIScrollView()
     
     private var cancellables = Set<AnyCancellable>()
-    
-//    private let hourlyCollectionView = UICollectionView()
-//    private lazy var source = CustomCollection.GridSource(container: hourlyCollectionView)
+
     
     override func viewDidLoad() {
         super.viewDidLoad()
         setupUI()
-        bindUI()
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -44,19 +57,22 @@ final class MainViewController: UIViewController {
     
     private func setupUI() {
         view.addSubview(scrollView)
+        scrollView.snp.makeConstraints {
+            $0.edges.equalTo(view.safeAreaLayoutGuide)
+        }
         
-        scrollView.pinTo(view)
         let contentView = UIView()
         scrollView.addSubview(contentView)
         contentView.snp.makeConstraints {
-            $0.top.bottom.equalTo(scrollView)
-            $0.leading.trailing.equalTo(view)
-            $0.height.equalTo(1500)
+            $0.edges.equalTo(scrollView)
+            $0.width.equalTo(scrollView)
         }
         
-        contentView.addSubviews(reloadButton, currentWeatherView, hourlyForecastView, dailyForecastView)
-        reloadButton.snp.makeConstraints {
-            $0.top.leading.equalToSuperview().offset(15)
+        contentView.addSubviews(cachedLabel, currentWeatherView, hourlyForecastView, dailyForecastView)
+        
+        cachedLabel.snp.makeConstraints {
+            $0.top.equalToSuperview().offset(20)
+            $0.centerX.equalToSuperview()
         }
         currentWeatherView.snp.makeConstraints {
             $0.top.equalToSuperview().offset(70)
@@ -71,27 +87,53 @@ final class MainViewController: UIViewController {
         dailyForecastView.snp.makeConstraints {
             $0.top.equalTo(hourlyForecastView.snp.bottom).offset(10)
             $0.leading.trailing.equalToSuperview().inset(20)
+            $0.bottom.equalTo(contentView)
         }
-    }
-    
-    private func bindUI() {
-        reloadButton.tapPublisher()
-            .sink { [weak self] in self?.presenter.forceUpdateLocation()}
-            .store(in: &cancellables)
     }
 }
 
 extension MainViewController: PresenterView {
-    func displayError() {
-        let alert = UIAlertController(title: "Error", message: "Something wen wrong", preferredStyle: UIAlertController.Style.alert)
+    func displayError(type: ErrorType) {
+        let alert = UIAlertController(title: "Error", message: type.title, preferredStyle: UIAlertController.Style.alert)
         alert.addAction(UIAlertAction(title: "OK", style: UIAlertAction.Style.default, handler: nil))
         present(alert, animated: true, completion: nil)
     }
     
-    func displayWeather(_ allData: ForecastDomainModel) {
-        currentWeatherView.setup(with: allData)
-        hourlyForecastView.setup(with: allData.futureForecast.days,
-                                 tzOffset: allData.tzOffset)
+    func displayWeather(_ allData: ForecastDomainModel, fromCache: Bool) {
+        let currentWeatherInfo = CurrentWeatherViewInfo(
+            locationName: allData.locationName ?? "Unknown location",
+            temp: allData.currentForecast.tempC,
+            minTemp: allData.futureForecast.days.first?.minTempC,
+            maxTemp: allData.futureForecast.days.first?.maxTempC,
+            condition: allData.futureForecast.days.first?.condition ?? "")
+        currentWeatherView.setup(with: currentWeatherInfo)
+        
+        
+        let hourlyWeatherInfo = presenter.prepareHourlyData(
+            data: allData.futureForecast.days,
+            tzOffset: allData.tzOffset)
+        hourlyForecastView.setup(with: hourlyWeatherInfo)
+        
+        let dailyWeathrInfo = presenter.prepareDailyData(
+            data: allData.futureForecast.days,
+            tzOffset: allData.tzOffset)
+        dailyForecastView.setup(with: dailyWeathrInfo)
+        
+        if fromCache, let lastUpdate = allData.lastUpdated {
+            cachedLabel.isHidden = false
+            cachedLabel.text = "Last update at: \(lastUpdate.getFormattedDate())"
+        } else {
+            cachedLabel.isHidden = true
+        }
+    }
+}
+
+
+extension Date {
+   func getFormattedDate() -> String {
+        let dateformat = DateFormatter()
+        dateformat.dateFormat = "yyyy-MM-dd HH:mm"
+        return dateformat.string(from: self)
     }
 }
 

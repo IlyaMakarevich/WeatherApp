@@ -16,13 +16,13 @@ extension ForecastEntity {
         return NSFetchRequest<ForecastEntity>(entityName: "ForecastEntity")
     }
 
+    @NSManaged public var lastUpdated: Date?
     @NSManaged public var locationName: String?
     @NSManaged public var lat: Double
     @NSManaged public var lon: Double
-    @NSManaged public var tzOffset: Int16
+    @NSManaged public var tzOffset: Int32
     @NSManaged public var currentForecast: CurrentForecastEntity?
     @NSManaged public var futureForecast: FutureForecastEntity?
-
 }
 
 extension ForecastEntity : Identifiable {

@@ -8,6 +8,16 @@
 import Foundation
 import UIKit
 
+struct HourlyForecastViewInfo {
+    let hours: [HourItemInfo]
+    
+    struct HourItemInfo {
+        let time: Date
+        let code: Int
+        let temp: Int
+    }
+}
+
 final class HourlyForecastView: BaseView {
     private lazy var layout = UICollectionViewFlowLayout().with {
         $0.scrollDirection = .horizontal
@@ -40,23 +50,15 @@ final class HourlyForecastView: BaseView {
         addSubview(collectionView)
         collectionView.pinToSuperview()
         collectionView.clipsToBounds = true
-
     }
     
-    func setup(with data: [DayForecastDomainModel], tzOffset: Int) {
-        let nowGmt = Date().toGlobalTime()
-        let now = nowGmt.addingTimeInterval(TimeInterval(tzOffset))
-        let allHours: [HourForecastDomainModel] = data.reduce(into: [HourForecastDomainModel]()) { partialResult, day in
-            partialResult.append(contentsOf: day.hours)
-        }
-
-        let allHoursLimited = allHours.sorted(by: { $0.date < $1.date }).filter { $0.date > now }.prefix(24)
-        
-        var hourInfos: [CollectionCell] = allHoursLimited.map {
-            let hour = Calendar.current.component(.hour, from: $0.date)
-            return Hour(.init(time: String(hour),
-                              condition: $0.conditionCode,
-                              temp: String($0.tempC)))
+    func setup(with data: HourlyForecastViewInfo) {
+        let hourInfos: [CollectionCell] = data.hours.enumerated().map { index, item in
+            let hour = Calendar.current.component(.hour, from: item.time)
+            let time = index == 0 ? "Now": String(hour)
+            return Hour(.init(time: time,
+                              condition: item.code,
+                              temp: String(item.temp)))
         }
         source.sections = [.init(header: nil, hourInfos)]
     }

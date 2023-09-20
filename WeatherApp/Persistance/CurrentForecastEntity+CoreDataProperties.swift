@@ -26,7 +26,7 @@ extension CurrentForecastEntity {
     @NSManaged public var condition: String?
     @NSManaged public var feelC: Double
     @NSManaged public var fellF: Double
-    @NSManaged public var conditionCode: Int16
+    @NSManaged public var conditionCode: Int32
     @NSManaged public var forecastEntity: ForecastEntity?
 
 }

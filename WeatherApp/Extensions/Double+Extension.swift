@@ -8,7 +8,7 @@
 import Foundation
 
 extension Double {
-    func roundedWithoutZero() -> String {
-        return String(Int(self.rounded()))
+    func roundedTempWithoutZero() -> String {
+        return String(Int(self.rounded())) + "°"
     }
 }

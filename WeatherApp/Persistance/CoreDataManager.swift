@@ -37,8 +37,8 @@ final class CoreDataManager: NSObject {
         forecastEntity.locationName = model.locationName
         forecastEntity.lat = model.lat
         forecastEntity.lon = model.lon
-        forecastEntity.tzOffset = Int16(model.tzOffset)
-        
+        forecastEntity.tzOffset = Int32(model.tzOffset)
+        forecastEntity.lastUpdated = model.lastUpdated
         // Current
         let currentEntity = CurrentForecastEntity(entity: currentForecastEntityDescription,
                                                   insertInto: context)
@@ -57,6 +57,7 @@ final class CoreDataManager: NSObject {
             dayEntity.avgTempC = day.avgTempC
             dayEntity.avgTempF = day.avgTempF
             dayEntity.condition = day.condition
+            dayEntity.conditionCode = Int32(day.conditionCode)
             dayEntity.minTempC = day.minTempC
             dayEntity.minTempF = day.minTempF
             dayEntity.maxTempC = day.maxTempC
@@ -65,11 +66,13 @@ final class CoreDataManager: NSObject {
             dayEntity.visMiles = day.visMiles
             dayEntity.windKPH = day.windMPH
             dayEntity.windMPH = day.windMPH
+            dayEntity.date = day.date
             day.hours.forEach { hour in
                 let hourEntity = HourForecastEntity(entity: hourForecastEntityDescription,
                                                     insertInto: context)
                 hourEntity.date = hour.date
                 hourEntity.condition = hour.condition
+                hourEntity.conditionCode = Int32(hour.conditionCode)
                 hourEntity.feelC = hour.feelC
                 hourEntity.feelF = hour.feelF
                 hourEntity.humidity = hour.humidity

@@ -8,19 +8,8 @@
 import Foundation
 import UIKit
 
-// in view
-struct CurrentWeatherModel {
-    let tempF: Double
-    let tempC: Double
-    let descr: String
-    let conditionCode: Int
-    let minTempF: Double?
-    let maxTempF: Double?
-    let minTempC: Double?
-    let maxTempC: Double?
-}
-
 struct ForecastDomainModel {
+    let lastUpdated: Date?
     let locationName: String?
     let lat: Double
     let lon: Double
@@ -28,7 +17,6 @@ struct ForecastDomainModel {
     let currentForecast: CurrentWeatherDomainModel
     let futureForecast: FutureForecastDomainModel
 }
-
 
 struct FutureForecastDomainModel {
     let days: [DayForecastDomainModel]
@@ -42,6 +30,7 @@ struct CurrentWeatherDomainModel {
 }
 
 struct DayForecastDomainModel {
+    let date: Date
     let maxTempC: Double
     let maxTempF: Double
     let minTempC: Double

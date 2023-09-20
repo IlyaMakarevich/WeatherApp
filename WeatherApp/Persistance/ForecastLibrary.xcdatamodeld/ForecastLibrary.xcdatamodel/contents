@@ -2,7 +2,7 @@
 <model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="21754" systemVersion="22G91" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
     <entity name="CurrentForecastEntity" representedClassName="CurrentForecastEntity" syncable="YES">
         <attribute name="condition" optional="YES" attributeType="String"/>
-        <attribute name="conditionCode" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="conditionCode" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="feelC" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
         <attribute name="fellF" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
         <attribute name="humidity" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
@@ -18,7 +18,8 @@
         <attribute name="avgTempC" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
         <attribute name="avgTempF" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
         <attribute name="condition" optional="YES" attributeType="String"/>
-        <attribute name="conditionCode" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="conditionCode" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="date" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="maxTempC" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
         <attribute name="maxTempF" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
         <attribute name="minTempC" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
@@ -31,10 +32,11 @@
         <relationship name="hourForecasts" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="HourForecastEntity" inverseName="dayEntity" inverseEntity="HourForecastEntity"/>
     </entity>
     <entity name="ForecastEntity" representedClassName="ForecastEntity" syncable="YES">
+        <attribute name="lastUpdated" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="lat" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
         <attribute name="locationName" optional="YES" attributeType="String"/>
         <attribute name="lon" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
-        <attribute name="tzOffset" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="tzOffset" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
         <relationship name="currentForecast" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="CurrentForecastEntity" inverseName="forecastEntity" inverseEntity="CurrentForecastEntity"/>
         <relationship name="futureForecast" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="FutureForecastEntity" inverseName="forecastEntity" inverseEntity="FutureForecastEntity"/>
     </entity>
@@ -44,7 +46,7 @@
     </entity>
     <entity name="HourForecastEntity" representedClassName="HourForecastEntity" syncable="YES">
         <attribute name="condition" optional="YES" attributeType="String"/>
-        <attribute name="conditionCode" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="conditionCode" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="date" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="feelC" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
         <attribute name="feelF" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
