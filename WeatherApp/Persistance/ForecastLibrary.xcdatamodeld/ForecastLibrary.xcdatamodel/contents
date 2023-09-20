@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="21754" systemVersion="22G91" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+    <entity name="CurrentForecastEntity" representedClassName="CurrentForecastEntity" syncable="YES">
+        <attribute name="condition" optional="YES" attributeType="String"/>
+        <attribute name="conditionCode" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="feelC" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="fellF" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="humidity" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="tempC" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="tempF" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="visKm" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="visMiles" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="windKPH" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="windMPH" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <relationship name="forecastEntity" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="ForecastEntity" inverseName="currentForecast" inverseEntity="ForecastEntity"/>
+    </entity>
+    <entity name="DayForecastEntity" representedClassName="DayForecastEntity" syncable="YES">
+        <attribute name="avgTempC" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="avgTempF" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="condition" optional="YES" attributeType="String"/>
+        <attribute name="conditionCode" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="maxTempC" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="maxTempF" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="minTempC" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="minTempF" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="visKm" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="visMiles" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="windKPH" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="windMPH" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <relationship name="futureForecasts" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="FutureForecastEntity" inverseName="dayForecasts" inverseEntity="FutureForecastEntity"/>
+        <relationship name="hourForecasts" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="HourForecastEntity" inverseName="dayEntity" inverseEntity="HourForecastEntity"/>
+    </entity>
+    <entity name="ForecastEntity" representedClassName="ForecastEntity" syncable="YES">
+        <attribute name="lat" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="locationName" optional="YES" attributeType="String"/>
+        <attribute name="lon" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="tzOffset" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+        <relationship name="currentForecast" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="CurrentForecastEntity" inverseName="forecastEntity" inverseEntity="CurrentForecastEntity"/>
+        <relationship name="futureForecast" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="FutureForecastEntity" inverseName="forecastEntity" inverseEntity="FutureForecastEntity"/>
+    </entity>
+    <entity name="FutureForecastEntity" representedClassName="FutureForecastEntity" syncable="YES">
+        <relationship name="dayForecasts" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="DayForecastEntity" inverseName="futureForecasts" inverseEntity="DayForecastEntity"/>
+        <relationship name="forecastEntity" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="ForecastEntity" inverseName="futureForecast" inverseEntity="ForecastEntity"/>
+    </entity>
+    <entity name="HourForecastEntity" representedClassName="HourForecastEntity" syncable="YES">
+        <attribute name="condition" optional="YES" attributeType="String"/>
+        <attribute name="conditionCode" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="date" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="feelC" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="feelF" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="humidity" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="tempC" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="tempF" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="visKm" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="visMiles" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="windKPH" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="windMPH" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <relationship name="dayEntity" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="DayForecastEntity" inverseName="hourForecasts" inverseEntity="DayForecastEntity"/>
+    </entity>
+</model>
