@@ -1,5 +1,7 @@
 # WeatherApp
 
+![Screenshot](weather1.png) ![Screenshot](weather2.png)
+
 Один экран. Архитектура MVP.
 
 Скролл. Внтури скрола располложены элементы:  
