@@ -12,14 +12,16 @@ import Combine
 protocol LocationServiceProtocol {
     func requestPermissionAndStartTracking()
     func forceUpdateLocation()
-    var locationTracker: AnyPublisher<CLLocation, Never> { get }
+    var locationTracker: AnyPublisher<CLLocation?, Never> { get }
 }
 
 final class LocationService: NSObject, LocationServiceProtocol, CLLocationManagerDelegate {
     private let locationManager = CLLocationManager()
-    private var locationTrackerSubject = PassthroughSubject<CLLocation, Never>()
+    private var locationTrackerSubject = PassthroughSubject<CLLocation?, Never>()
     
-    var locationTracker: AnyPublisher<CLLocation, Never> {
+    private var newLocation: CLLocation?
+    
+    var locationTracker: AnyPublisher<CLLocation?, Never> {
         return locationTrackerSubject.eraseToAnyPublisher()
     }
     
@@ -40,11 +42,13 @@ final class LocationService: NSObject, LocationServiceProtocol, CLLocationManage
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         let newLocation = locations.last
         guard let newLocation else { return }
-        print(newLocation.coordinate)
         locationTrackerSubject.send(newLocation)
+        self.newLocation = newLocation
     }
     
     func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
-        debugPrint("LocationService: didFailWithError")
+        if newLocation == nil {
+            locationTrackerSubject.send(nil)
+        }
     }
 }

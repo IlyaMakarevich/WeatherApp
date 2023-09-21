@@ -12,6 +12,7 @@ import CoreLocation
 protocol PresenterView: NSObject {
     func displayWeather(_ allData: ForecastDomainModel, fromCache: Bool)
     func displayError(type: ErrorType)
+    func displayLocationMessage(locationAvailable: Bool)
 }
 
 class MainPresenter {
@@ -51,6 +52,12 @@ class MainPresenter {
     func subscribeOnLocationChange() {
         locationService.locationTracker
             .sink { [weak self] newLocation in
+                guard let newLocation else {
+                    self?.view?.displayLocationMessage(locationAvailable: false)
+                    return
+                }
+                
+                self?.view?.displayLocationMessage(locationAvailable: true)
                 let coordinates = Coordinates(latitude: newLocation.coordinate.latitude,
                                         longitude: newLocation.coordinate.longitude)
                 

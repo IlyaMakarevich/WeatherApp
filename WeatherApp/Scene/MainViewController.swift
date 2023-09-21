@@ -36,6 +36,12 @@ final class MainViewController: UIViewController {
         $0.isHidden = true
     }
     
+    private let locationDeniedLabel = UILabel().with {
+        $0.text = "Can't detect location."
+        $0.font = UIFont.systemFont(ofSize: 12, weight: .thin)
+        $0.isHidden = true
+    }
+    
     private let currentWeatherView = CurrentWeatherView()
     private let hourlyForecastView = HourlyForecastView()
     private let dailyForecastView = DailyForecastView()
@@ -80,9 +86,14 @@ final class MainViewController: UIViewController {
             $0.width.equalTo(scrollView)
         }
         
-        contentView.addSubviews(cachedLabel, currentWeatherView, hourlyForecastView, dailyForecastView, firstWidgetsStack, secondWidgetsStack)
+        contentView.addSubviews(cachedLabel, locationDeniedLabel, currentWeatherView, hourlyForecastView, dailyForecastView, firstWidgetsStack, secondWidgetsStack)
         
         cachedLabel.snp.makeConstraints {
+            $0.top.equalToSuperview().offset(20)
+            $0.centerX.equalToSuperview()
+        }
+        
+        locationDeniedLabel.snp.makeConstraints {
             $0.top.equalToSuperview().offset(20)
             $0.centerX.equalToSuperview()
         }
@@ -184,6 +195,10 @@ extension MainViewController: PresenterView {
             secondWidgetsStack.addArrangedSubview(visWidget)
         }
         
+    }
+    
+    func displayLocationMessage(locationAvailable: Bool) {
+        locationDeniedLabel.isHidden = locationAvailable
     }
 }
 
