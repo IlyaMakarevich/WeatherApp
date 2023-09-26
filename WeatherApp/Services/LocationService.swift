@@ -8,6 +8,7 @@
 import Foundation
 import CoreLocation
 import Combine
+import UIKit
 
 protocol LocationServiceProtocol {
     func requestPermissionAndStartTracking()
@@ -20,6 +21,7 @@ final class LocationService: NSObject, LocationServiceProtocol, CLLocationManage
     private var locationTrackerSubject = PassthroughSubject<CLLocation?, Never>()
     
     private var newLocation: CLLocation?
+    
     
     var locationTracker: AnyPublisher<CLLocation?, Never> {
         return locationTrackerSubject.eraseToAnyPublisher()
@@ -42,7 +44,9 @@ final class LocationService: NSObject, LocationServiceProtocol, CLLocationManage
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         let newLocation = locations.last
         guard let newLocation else { return }
-        locationTrackerSubject.send(newLocation)
+        if (newLocation.coordinate.latitude != self.newLocation?.coordinate.latitude) || (newLocation.coordinate.longitude != self.newLocation?.coordinate.longitude) {
+            locationTrackerSubject.send(newLocation)
+        }
         self.newLocation = newLocation
     }
     
